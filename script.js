@@ -14,7 +14,8 @@ var assets = [
   "https://raw.githubusercontent.com/karelrosseel/evadeherdt/master/falling/hit.png",
   "https://raw.githubusercontent.com/karelrosseel/evadeherdt/master/falling/uitroep.png",
   "https://raw.githubusercontent.com/karelrosseel/evadeherdt/master/falling/man.png",
-  "bomnia_transparant.png"
+  "bomnia_transparant.png",
+  "beer.png"
 ];
 var path = "assets/";
 
@@ -164,12 +165,15 @@ frame.on("ready", function () {
     interval([500, 1500], function () {
       var coin = frame
         .asset(
-          "https://raw.githubusercontent.com/karelrosseel/evadeherdt/master/falling/coin.png"
+          // "https://raw.githubusercontent.com/karelrosseel/evadeherdt/master/falling/coin.png"
+          "beer.png"
         )
         .clone();
       coin
         .reg(coin.width / 2, coin.height)
         .loc(rand(coin.width, game.width - coin.width), -10, coins);
+      coin.scaleX = 0.2;
+      coin.scaleY = 0.2;
 
       var wow = frame
         .asset(
