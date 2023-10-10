@@ -1,0 +1,9 @@
+body {
+    margin-top: 100px; /* Adjust the margin to position the logo */
+  }
+
+img {
+display: block; /* This ensures that any default inline spacing is removed */
+margin: 0 auto; /* Center the image horizontally */
+max-width: 100%; /* Make sure the image doesn't exceed its natural size */
+}
