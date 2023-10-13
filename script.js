@@ -25,8 +25,8 @@ frame.on("ready", function () {
   zog("ready from ZIM Frame");
   
   // Create and display the counter and high score labels
-  var counterLabel = new zim.Label("Beers Caught: 0", 30, null, xomnia_color).pos(40, 40);
-  var highScoreLabel = new zim.Label("High Score: 0", 30, null, xomnia_color).pos(40, 80);
+  var counterLabel = new zim.Label("Beers Caught: 0", 20, null, xomnia_color).pos(40, 55);
+  var highScoreLabel = new zim.Label("High Score: 0", 20, null, xomnia_color).pos(40, 75);
 
   var stage = frame.stage;
   var stageW = frame.width;
