@@ -1,9 +1,7 @@
-var scaling = "fit"; // this will resize to fit inside the screen dimensions
+var scaling = "full";
 var width = 1400;
 var height = 800;
-// var color = '#2d4d9d'; // or any HTML color such as "violet" or "#333333"
-var color = white; // or any HTML color such as "violet" or "#333333"
-// var outerColor = '#2d4d9d';
+var color = white;
 var outerColor = white;
 var xomnia_color = '#2d4d9d';
 var xomnia_color = white;
