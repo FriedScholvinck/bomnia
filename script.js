@@ -1,19 +1,21 @@
-var scaling = "full";
+var scaling = "fit";
 var width = 1400;
 var height = 800;
 var color = white;
 var outerColor = white;
 var xomnia_color = '#2d4d9d';
-var xomnia_color = white;
+var beersCaught = 0;
+var highScore = 0;
 
 var assets = [
   "https://raw.githubusercontent.com/karelrosseel/evadeherdt/master/falling/bomb.png",
-  "https://raw.githubusercontent.com/karelrosseel/evadeherdt/master/falling/coin.png",
   "https://raw.githubusercontent.com/karelrosseel/evadeherdt/master/falling/hit.png",
   "https://raw.githubusercontent.com/karelrosseel/evadeherdt/master/falling/uitroep.png",
   "https://raw.githubusercontent.com/karelrosseel/evadeherdt/master/falling/man.png",
   "bomnia_transparant.png",
-  "beer.png"
+  "beer.png",
+  // {id: "counterLabel", type: "label", text: "Beers Caught: 0", font: "20px Arial", color: xomnia_color},
+  // {id: "highScoreLabel", type: "label", text: "High Score: 0", font: "20px Arial", color: xomnia_color}
 ];
 var path = "assets/";
 
@@ -22,76 +24,26 @@ var frame = new zim.Frame(scaling, width, height, color, outerColor, assets);
 frame.on("ready", function () {
   zog("ready from ZIM Frame");
   
+  // Create and display the counter and high score labels
+  var counterLabel = new zim.Label("Beers Caught: 0", 30, null, xomnia_color).pos(40, 40);
+  var highScoreLabel = new zim.Label("High Score: 0", 30, null, xomnia_color).pos(40, 80);
+
   var stage = frame.stage;
   var stageW = frame.width;
   var stageH = frame.height;
-
-  // To make things fall we add an animate function to the Ticker
-  // that adds a number of pixels (speed) to the object each Tick
-  // the Ticker will add a stage.update automatically
-  // on option is to use move() to individually tween the item
-  // but this can be more work than necessary for the processor
-  // so just animating with code is fine
-
-  // often we want to make multiple copies fall
-  // we can create a setTimeout function and have it make a clone of an asset
-  // then at the end of the setTimeout function we call the function again
-  // this has the advantage of being able to set up random times between drop
-
-  // to animate multiple objects it is best to add the objects to a createjs.Container
-  // then we can loop through the objects in the container and move each one
-
-  // we often have something that is catching or avoiding the falling objects
-  // for instance, a person - then we might want the person to follow the mouse
-  // or perhaps keyboard or drag in some cases
-  // it is nice when damping is used on the movement of the person as well
-
-  // we will probably want to check if the person catches or hits the objects
-  // in the animation loop where we move the objects
-  // we need can do a hitTest to see if the object has hit the person
-  // depending on how many objects and their shapes
-  // we choose from the variety of zim hitTests
-  // the fastest hitTest is hitTestBounds as it calculates rectangle intersection
-  // others may bog if there are too many as they use graphical hitTests
-
-  // EXTRA
-  // we might want to keep score if we are collecting things
-  // and perhaps make the person lose points or die if they get hit
-  // we may want to have multiple types of things falling worth different points
-  // in that case, as we make the object we assign the points as a property of the object
-  // and then when we check the hit test, we can access the points
-  // we would want to add sounds, perhaps levels with different speeds, etc.
-
+  
+  
   // STEPS
   // 1. create a backing that can be used as a mask (or just go full screen)
-  // 2. create a container for the game (or just use the stage)
-  // 3. create a person to dodge and catch items and position at the bottom
-  // 4. optionally start the game when the user moves their mouse or swipes
-  // 5. add a Ticker to run an animation function
-  // note: Ticker consolidates and manages stage.updates
-  // 6. call drop functions
-  // 7. make a createjs.Container for the dropped items
-  // 8. make the drop function to add a clone of the item to the container
-  // 9. use a interval to randomly set the interval (and use requestAnimationFrame)
-  // 10. set a Damp object to handle damping the movement of the person
-  // 11. in the animate function move the person to the damped stage.mouseX
-  // 12. loop backwards through all the children of the falling item container
-  // 13. move the item
-  // 14. check to see of the item is hitting the player
-  // 15. if so then do whatever and remove the item from the container
-  // 16. also check to see if item has fallen past the ground
-  // 17. we can make little animations, etc. when things are hit
-
-  // STEPS
-  // 1. create a backing that can be used as a mask (or just go full screen)
-  var backing = new Rectangle(stageW - 80, stageH - 250, xomnia_color)
-    .center()
-    .mov(0, -20);
-
+  var backing = new Rectangle(stageW - 80, stageH - 250, white)
+  .center()
+  .mov(0, -20);
+  
   // 2. create a container for the game (or just use the stage)
   var game = new Container(backing.width, backing.height)
-    .loc(backing)
-    .setMask(backing);
+  .loc(backing)
+  .setMask(backing);
+  
 
   var logo = frame
     .asset('bomnia_transparant.png')
@@ -118,7 +70,7 @@ frame.on("ready", function () {
 
     // 6. call drop functions
     dropBombs();
-    dropCoins();
+    dropbeers();
   }
 
   // 7. make a createjs.Container for the dropped items
@@ -152,26 +104,26 @@ frame.on("ready", function () {
 
   // 7. make a createjs.Container for the dropped items
 
-  // COINS
-  var coins = new Container().addTo(game);
+  // beerS
+  var beers = new Container().addTo(game);
 
   // 8. make the drop function to add a clone of the item to the container
   // if you have lots of types of items then consider a function with parameters
   // and configuration arrays to handle asset, points, interval, speed, etc.
-  function dropCoins() {
+  function dropbeers() {
     // 9. use a interval to randomly set the interval (and use requestAnimationFrame)
     interval([500, 1500], function () {
-      var coin = frame
+      var beer = frame
         .asset(
-          // "https://raw.githubusercontent.com/karelrosseel/evadeherdt/master/falling/coin.png"
+          // "https://raw.githubusercontent.com/karelrosseel/evadeherdt/master/falling/beer.png"
           "beer.png"
         )
         .clone();
-      coin
-        .reg(coin.width / 2, coin.height)
-        .loc(rand(coin.width, game.width - coin.width), -10, coins);
-      coin.scaleX = 0.2;
-      coin.scaleY = 0.2;
+      beer
+        .reg(beer.width / 2, beer.height)
+        .loc(rand(beer.width, game.width - beer.width), -10, beers);
+      beer.scaleX = 0.2;
+      beer.scaleY = 0.2;
 
       var wow = frame
         .asset(
@@ -179,7 +131,7 @@ frame.on("ready", function () {
         )
         .clone();
       wow.reg(wow.width / 2, wow.height);
-      coin.wow = wow;
+      beer.wow = wow;
     });
   }
 
@@ -207,6 +159,8 @@ frame.on("ready", function () {
           // 15. if so then do whatever and remove the item from the container
           // lose game or take away life or points, play sound, etc.
           explode(bomb);
+          beersCaught = 0; // Reset the counter to zero when a bomb is hit
+          updateCounter();
         }
 
         // 16. also check to see if item has fallen past the ground
@@ -217,17 +171,36 @@ frame.on("ready", function () {
       true
     ); // true loops backwards as we are removing children
 
-    coins.loop(function (coin) {
-      coin.y += speed;
-      if (robber.hitTestBounds(coin)) {
-        grab(coin);
-        // get points etc.
+    // beers.loop(function (beer) {
+    //   beer.y += speed;
+    //   if (robber.hitTestBounds(beer)) {
+    //     grab(beer);
+    //     // get points etc.
+    //   }
+    //   if (beer.y >= game.height + beer.height + 10) {
+    //     beer.wow = null;
+    //     remove(beer); // our remove function at bottom of code
+    //   }
+    // }, true); // true loops backwards as we are removing children
+
+
+    beers.loop(function (beer) {
+      beer.y += speed;
+      if (robber.hitTestBounds(beer)) {
+          grab(beer);
+          beersCaught++;
+          updateCounter();
+          // Check if the current score is higher than the high score
+          if (beersCaught > highScore) {
+              highScore = beersCaught;
+              updateHighScore();
+          }
       }
-      if (coin.y >= game.height + coin.height + 10) {
-        coin.wow = null;
-        remove(coin); // our remove function at bottom of code
+      if (beer.y >= game.height + beer.height + 10) {
+          beer.wow = null;
+          remove(beer);
       }
-    }, true); // true loops backwards as we are removing children
+    }, true);
   }
 
   // 17. we can make little animations, etc. when things are hit
@@ -249,20 +222,26 @@ frame.on("ready", function () {
   }
 
   // 17. we can make little animations, etc. when things are hit
-  function grab(coin) {
-    coin.wow
+  function grab(beer) {
+    beer.wow
       .addTo(game)
-      .loc(coin.x, robber.y - robber.height - 20)
+      .loc(beer.x, robber.y - robber.height - 20)
       .animate({ alpha: 0 }, 100, null, remove, null, 100); // last param is wait;
-    remove(coin);
+    remove(beer);
+  }
+
+  function updateCounter() {
+    counterLabel.text = "Beers Caught: " + beersCaught;
+  }
+
+  function updateHighScore() {
+      highScoreLabel.text = "High Score: " + highScore;
   }
 
   function remove(obj) {
     obj.removeFrom();
     obj = null;
   }
-  
-  // var label = new zim.Label("Bomnia", 30, null, xomnia_color).pos(40, 40);
   
   stage.update();
 
