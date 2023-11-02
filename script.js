@@ -46,7 +46,7 @@ frame.on("ready", function () {
   
 
   var logo = frame
-    .asset('bomnia_transparant.png')
+    .asset('assets/bomnia_transparant.png')
     .loc(game.width / 2, game.height, game);
   logo.reg(logo.width / 2, logo.height);
   logo.scaleX = 0.6;
