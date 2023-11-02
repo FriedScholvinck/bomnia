@@ -12,8 +12,8 @@ var assets = [
   "https://raw.githubusercontent.com/karelrosseel/evadeherdt/master/falling/hit.png",
   "https://raw.githubusercontent.com/karelrosseel/evadeherdt/master/falling/uitroep.png",
   "https://raw.githubusercontent.com/karelrosseel/evadeherdt/master/falling/man.png",
-  "bomnia_transparant.png",
-  "beer.png",
+  "assets/bomnia_transparant.png",
+  "assets/beer.png",
   // {id: "counterLabel", type: "label", text: "Beers Caught: 0", font: "20px Arial", color: xomnia_color},
   // {id: "highScoreLabel", type: "label", text: "High Score: 0", font: "20px Arial", color: xomnia_color}
 ];
@@ -116,7 +116,7 @@ frame.on("ready", function () {
       var beer = frame
         .asset(
           // "https://raw.githubusercontent.com/karelrosseel/evadeherdt/master/falling/beer.png"
-          "beer.png"
+          "assets/beer.png"
         )
         .clone();
       beer
