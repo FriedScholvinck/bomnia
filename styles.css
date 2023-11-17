@@ -4,7 +4,7 @@
 }
 
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: 'Ubuntu', sans-serif;
   margin: 0;
   padding: 0;
   background-color: #f0f0f0;
@@ -14,10 +14,17 @@ h1 {
   color: var(--main-color);
   text-align: center;
   margin: 50px;
+  font-weight: 100;
 }
 
 h2 {
   color: var(--accent-color);
+}
+
+h3 {
+  color: var(--main-color);
+  /* light font */
+  font-weight: 100;
 }
 
 nav {
@@ -102,6 +109,16 @@ nav a.active {
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: stretch;
+}
+
+.tribe {
+  width: 300px;
+  margin: 20px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 8px;
+  background-color: var(--accent-color);
 }
 
 .team-member {
